@@ -1,0 +1,42 @@
+import unicodedata
+
+def is_palindrome_enhanced(text: str) -> bool:
+    """
+    Определяет, является ли строка палиндромом, игнорируя пробелы, знаки препинания,
+    регистр и диакритические знаки.
+
+    Args:
+        text: Строка для проверки.
+
+    Returns:
+        True, если строка является палиндромом, False в противном случае.
+    """
+    normalized_text = ''.join(c for c in unicodedata.normalize('NFD', text)
+                             if unicodedata.category(c) != 'Mn' and c.isalnum())
+    cleaned_text = normalized_text.casefold() # Используем casefold() для лучшей поддержки Unicode
+    return cleaned_text == cleaned_text[::-1]
+
+
+# Тесты с использованием assert (и добавлены тесты для нелатинских символов)
+
+assert is_palindrome_enhanced("А роза упала на лапу Азора") == True
+assert is_palindrome_enhanced("Лёша на полке клопа нашёл") == True
+assert is_palindrome_enhanced("12321") == True
+assert is_palindrome_enhanced("level") == True
+assert is_palindrome_enhanced("hello") == False
+assert is_palindrome_enhanced("Racecar") == True
+assert is_palindrome_enhanced("A man, a plan, a canal: Panama") == True
+assert is_palindrome_enhanced("") == True
+assert is_palindrome_enhanced(" ") == True
+assert is_palindrome_enhanced("Madam, I'm Adam") == True
+assert is_palindrome_enhanced("été") == True 
+assert is_palindrome_enhanced("Race car") == True # Проверка с пробелами
+assert is_palindrome_enhanced("Was it a car or a cat I saw?") == True # Более сложный пример
+assert is_palindrome_enhanced("No 'x' in Nixon") == True # С апострофом и пробелом
+
+# Дополнительные тесты для нелатинских символов
+assert is_palindrome_enhanced("Довод") == True # Русский палиндром
+assert is_palindrome_enhanced("一二三二一") == True # Китайские цифры
+assert is_palindrome_enhanced("サガス") == True # Японский палиндром
+
+
