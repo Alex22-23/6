@@ -1,0 +1,64 @@
+import unittest
+import sys
+from math import factorial as math_factorial
+
+def my_factorial(n: int) -> int:
+    """
+    Вычисляет факториал неотрицательного целого числа.
+
+    Args:
+        n: Неотрицательное целое число.
+
+    Returns:
+        Факториал числа n.
+
+    Raises:
+        TypeError: Если n не является целым числом.
+        ValueError: Если n отрицательное.
+    """
+    if not isinstance(n, int):
+        raise TypeError("Входное значение должно быть целым числом.")
+    if n < 0:
+        raise ValueError("Факториал отрицательного числа не определен.")
+
+    result = 1
+    for i in range(1, n + 1):
+        result *= i
+    return result
+
+
+
+class TestMyFactorial(unittest.TestCase):
+    def test_zero(self):
+        self.assertEqual(my_factorial(0), 1)
+
+    def test_one(self):
+        self.assertEqual(my_factorial(1), 1)
+
+    def test_positive(self):
+        self.assertEqual(my_factorial(5), 120)
+        self.assertEqual(my_factorial(10), math_factorial(10)) # Сравнение с math.factorial
+        self.assertEqual(my_factorial(20), math_factorial(20)) # Добавлен тест для n=20
+
+    def test_negative(self):
+        with self.assertRaises(ValueError):
+            my_factorial(-1)
+
+
+    def test_type_error_string(self):
+        with self.assertRaises(TypeError):
+            my_factorial("abc")
+
+    def test_type_error_float(self):
+        with self.assertRaises(TypeError):
+            my_factorial(2.5)
+
+    def test_type_error_list(self): # Добавлен тест для списка
+        with self.assertRaises(TypeError):
+            my_factorial([1,2,3])
+
+
+
+if __name__ == '__main__': # Исправлено условие запуска тестов
+    unittest.main()
+
